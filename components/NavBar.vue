@@ -28,11 +28,11 @@
         </button>
 
         <div
-          class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-lg bg-white text-base shadow-lg dark:divide-gray-600 dark:bg-gray-700"
+          class="z-50 my-4 hidden max-w-[200px] list-none divide-y divide-gray-100 rounded-lg bg-white text-base shadow-lg dark:divide-gray-600 dark:bg-gray-700"
           id="user-dropdown"
         >
           <div class="px-4 py-3">
-            <span class="block text-sm text-gray-900 dark:text-white"
+            <span class="mb-1 block text-sm text-gray-900 dark:text-white"
               >Dr. {{ auth.user?.name }}</span
             >
             <span
