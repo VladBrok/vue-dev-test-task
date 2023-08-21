@@ -1,0 +1,49 @@
+<template>
+  <div v-if="pending" class="mt-16 flex justify-center">
+    <Spinner />
+  </div>
+  <div v-else class="w-full bg-white px-4 dark:bg-gray-800 sm:px-8">
+    <div class="flow-root">
+      <ul role="list" class="divide-y divide-gray-300 dark:divide-gray-700">
+        <li
+          v-for="patient in patients"
+          :key="patient.id"
+          :class="`px-4 py-3 hover:cursor-pointer hover:bg-gray-200 sm:py-4 ${
+            patient.id === modelValue ? 'bg-gray-200' : ''
+          }`"
+          @click="$emit('update:modelValue', patient.id)"
+        >
+          <div class="flex items-center space-x-4">
+            <div class="flex-shrink-0">
+              <img
+                class="h-8 w-8 rounded-full"
+                :src="patient.image || ''"
+                :alt="`${patient.name}'s avatar'`"
+              />
+            </div>
+            <div class="min-w-0 flex-1">
+              <p
+                class="truncate text-sm font-medium text-gray-900 dark:text-white"
+              >
+                {{ patient.name }}
+              </p>
+              <p class="truncate text-sm text-gray-500 dark:text-gray-400">
+                {{ patient.email }}
+              </p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+const { data: patients, pending } = useFetch("/api/patient"); // TODO: handle error with toaster
+
+const props = defineProps({
+  modelValue: String,
+});
+
+const emit = defineEmits(["update:modelValue"]);
+</script>
