@@ -23,6 +23,7 @@ model Patient {
   name             String
   image String?
   email String
+  diagnosis String
   registrationDate DateTime        @default(now())
   DoctorPatient    DoctorPatient[]
 }

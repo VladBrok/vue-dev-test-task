@@ -1,8 +1,10 @@
 import { prisma } from "~/prisma/db";
 
-export type Patient = Awaited<ReturnType<typeof prisma.patient.findMany>>;
+export type Patient = Awaited<
+  ReturnType<typeof prisma.patient.findMany>
+>[number];
 
-export default defineEventHandler(async (event): Promise<Patient> => {
+export default defineEventHandler(async (event): Promise<Patient[]> => {
   return await prisma.patient.findMany({
     orderBy: { registrationDate: "asc" },
   });

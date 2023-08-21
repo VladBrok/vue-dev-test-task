@@ -2,16 +2,16 @@
   <div v-if="pending" class="mt-16 flex justify-center">
     <Spinner />
   </div>
-  <div v-else class="w-full bg-white px-4 dark:bg-gray-800 sm:px-8">
+  <div v-else class="w-full bg-white dark:bg-gray-800">
     <div class="flow-root">
       <ul role="list" class="divide-y divide-gray-300 dark:divide-gray-700">
         <li
           v-for="patient in patients"
           :key="patient.id"
           :class="`px-4 py-3 hover:cursor-pointer hover:bg-gray-200 sm:py-4 ${
-            patient.id === modelValue ? 'bg-gray-200' : ''
+            patient.id === modelValue?.id ? 'bg-gray-200' : ''
           }`"
-          @click="$emit('update:modelValue', patient.id)"
+          @click="$emit('update:modelValue', patient)"
         >
           <div class="flex items-center space-x-4">
             <div class="flex-shrink-0">
@@ -39,11 +39,13 @@
 </template>
 
 <script setup lang="ts">
+import { Patient } from "~/server/api/patient.get";
+
 const { data: patients, pending } = useFetch("/api/patient"); // TODO: handle error with toaster
 
-const props = defineProps({
-  modelValue: String,
-});
+defineProps<{
+  modelValue: Patient | null;
+}>();
 
-const emit = defineEmits(["update:modelValue"]);
+defineEmits(["update:modelValue"]);
 </script>

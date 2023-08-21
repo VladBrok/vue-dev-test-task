@@ -6,7 +6,7 @@
       <NuxtLink to="/" class="flex items-center">
         <img src="/logo.png" class="mb-1 mr-3 h-8 w-8" alt="Flowbite Logo" />
         <span
-          class="hidden self-center whitespace-nowrap text-2xl dark:text-white sm:inline"
+          class="hidden self-center whitespace-nowrap text-xl dark:text-white sm:inline"
           >Medical History</span
         >
       </NuxtLink>

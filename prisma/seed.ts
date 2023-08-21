@@ -19,6 +19,8 @@ async function main() {
             name: faker.person.fullName(),
             email: faker.internet.email(),
             image: faker.image.avatar(),
+            diagnosis:
+              "Hypertonic disease. Persistent atrial fibrillation. Chronic heart failure",
           },
         }),
       ),
