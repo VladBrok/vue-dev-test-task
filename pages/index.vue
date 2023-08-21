@@ -1,15 +1,21 @@
-<template>
-  Main page
-  <div>{{ data }}</div>
-</template>
+<template>Main page</template>
 
 <script setup lang="ts">
-const { data } = await useFetch("/api/doctor", {
-  method: "POST",
-  body: {
-    name: "vlad1",
-    email: "vlad2",
-    image: "vlad3",
-  },
-});
+const auth = useAuth();
+
+const signedInEmail = useCookie("signedInEmail");
+
+// TODO: handle error by showing global toast notification
+if (auth.user && signedInEmail.value !== auth.user.email) {
+  await useFetch("/api/doctor", {
+    method: "POST",
+    body: {
+      name: auth.user.name,
+      email: auth.user.email,
+      image: auth.user.picture,
+    },
+  });
+
+  signedInEmail.value = auth.user.email;
+}
 </script>
