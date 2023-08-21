@@ -6,10 +6,29 @@ export interface IPostDoctor {
   image: string;
 }
 
-// TODO: validate with zod, infer type from zod
-
 export default defineEventHandler(async (event) => {
   const body = (await readBody(event)) as IPostDoctor;
+
+  if (!body.name) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "name is not provided",
+    });
+  }
+
+  if (!body.email) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "email is not provided",
+    });
+  }
+
+  if (!body.image) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "image is not provided",
+    });
+  }
 
   await prisma.doctor.upsert({
     where: { email: body.email },

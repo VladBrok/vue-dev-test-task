@@ -42,27 +42,33 @@
       </div>
     </div>
   </div>
+
+  <Notification v-if="isError" text="Error while saving an account." />
 </template>
 
 <script setup lang="ts">
 import { Patient } from "~/server/api/patient.get";
 
 const auth = useAuth();
-
 const signedInEmail = useCookie("signedInEmail");
+const isError = ref(false);
 
-// TODO: handle error by showing global toast notification
 if (auth.user && signedInEmail.value !== auth.user.email) {
-  await useFetch("/api/doctor", {
-    method: "POST",
-    body: {
-      name: auth.user.name,
-      email: auth.user.email,
-      image: auth.user.picture,
-    },
-  });
-
-  signedInEmail.value = auth.user.email;
+  try {
+    await useFetch("/api/doctor", {
+      method: "POST",
+      body: {
+        name: auth.user.name,
+        email: auth.user.email,
+        image: auth.user.picture,
+      },
+    });
+    signedInEmail.value = auth.user.email;
+    isError.value = false;
+  } catch (err) {
+    console.error(err);
+    isError.value = true;
+  }
 }
 
 const selectedPatient = ref<null | Patient>(null);
