@@ -86,6 +86,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: false,
+});
+
 const handleGoogleClick = async () => {
   const auth = useAuth();
   await auth.login();

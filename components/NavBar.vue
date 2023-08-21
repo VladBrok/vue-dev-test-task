@@ -6,7 +6,7 @@
       <NuxtLink to="/" class="flex items-center">
         <img src="/logo.png" class="mb-1 mr-3 h-8 w-8" alt="Flowbite Logo" />
         <span
-          class="hidden self-center whitespace-nowrap text-2xl font-semibold dark:text-white sm:inline"
+          class="hidden self-center whitespace-nowrap text-2xl dark:text-white sm:inline"
           >Medical History</span
         >
       </NuxtLink>
@@ -77,7 +77,7 @@
         </button>
       </div>
       <div
-        class="hidden w-full items-center justify-between md:order-1 md:flex md:w-auto"
+        class="ml-auto mr-8 hidden w-full items-center justify-between md:order-1 md:flex md:w-auto"
         id="navbar-user"
       >
         <ul

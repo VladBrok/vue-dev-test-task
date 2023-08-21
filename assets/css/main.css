@@ -5,3 +5,7 @@
 * {
   word-wrap: anywhere;
 }
+
+body {
+  overflow-y: hidden;
+}
