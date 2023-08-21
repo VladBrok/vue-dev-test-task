@@ -24,6 +24,7 @@
     "@nuxt-alt/http": "^1.6.6",
     "@pinia/nuxt": "^0.4.11",
     "@prisma/client": "^5.1.1",
+    "flowbite": "^1.8.1",
     "pinia": "^2.1.6"
   }
 }
