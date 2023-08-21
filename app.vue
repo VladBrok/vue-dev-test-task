@@ -1,8 +1,13 @@
 <template>
-  <NuxtPage />
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
+import { initFlowbite } from "flowbite";
+
 useHead({
   title: "Medical history",
   link: [
@@ -30,5 +35,9 @@ useHead({
     { name: "theme-color", content: "#ffffff" },
     { name: "description", content: "A medical history website." },
   ],
+});
+
+onMounted(() => {
+  initFlowbite();
 });
 </script>

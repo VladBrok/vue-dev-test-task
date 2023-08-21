@@ -1,4 +1,6 @@
-<template>Main page</template>
+<template>
+  <div></div>
+</template>
 
 <script setup lang="ts">
 const auth = useAuth();
