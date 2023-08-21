@@ -7,5 +7,5 @@
 }
 
 body {
-  overflow-y: hidden;
+  @apply sm:overflow-y-hidden;
 }

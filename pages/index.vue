@@ -2,13 +2,15 @@
   <div class="h-screen p-8">
     <h1 class="mb-8 text-center text-3xl font-bold">Patients</h1>
 
-    <div class="flex h-full">
+    <div class="flex h-full flex-col sm:flex-row">
       <div class="basis-1/2 overflow-y-auto px-4 pb-8 sm:px-8">
         <div class="mx-auto max-w-xl">
           <PatientsList v-model="selectedPatient" />
         </div>
       </div>
-      <div class="h-full basis-1/2 border-l-2 px-4 pb-8 sm:px-8">
+      <div
+        class="mt-12 h-full basis-1/2 px-4 pb-8 sm:mt-0 sm:border-l-2 sm:px-8"
+      >
         <div class="mx-auto h-full max-w-xl">
           <PatientInfo v-if="selectedPatient" :patient="selectedPatient" />
           <div
