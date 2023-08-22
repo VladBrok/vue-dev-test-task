@@ -30,7 +30,7 @@
       <h3 class="mb-3 mt-6 text-xl font-medium text-gray-900 dark:text-white">
         Doctors
       </h3>
-      <ul>
+      <ul v-if="patient.doctors.length">
         <li
           v-for="doctor in patient.doctors"
           :key="doctor.id"
@@ -40,6 +40,7 @@
           <span>{{ doctor.name }}</span>
         </li>
       </ul>
+      <span v-else>—</span>
     </div>
   </div>
 </template>
