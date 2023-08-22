@@ -5,7 +5,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo("/");
   }
 
-  if ((to.path === "/" || to.path === "/dashboard") && !auth.loggedIn) {
+  if (
+    (to.path === "/" ||
+      to.path === "/dashboard" ||
+      to.path === "/add-patient") &&
+    !auth.loggedIn
+  ) {
     return navigateTo("/auth");
   }
 });

@@ -60,6 +60,7 @@
               <button
                 type="button"
                 class="hover:bg-primary-800 focus:ring-primary-300 dark:hover:bg-primary-700 dark:focus:ring-primary-800 flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-4 dark:bg-blue-600"
+                @click="navigateTo('/add-patient')"
               >
                 <svg
                   class="mr-2 h-5 w-5"
