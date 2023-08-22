@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await prisma.doctor.upsert({
+  return await prisma.doctor.upsert({
     where: { email: body.email },
     create: {
       email: body.email,

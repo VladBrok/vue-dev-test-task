@@ -5,13 +5,16 @@ export type Patient = Awaited<
 >[number];
 
 export default defineEventHandler(async (event): Promise<Patient[]> => {
-  return await prisma.patient.findMany({
-    orderBy: { registrationDate: "asc" },
-  });
-});
+  const query = getQuery(event);
 
-export function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+  if (typeof query.doctorId === "string" && query.doctorId) {
+    return await prisma.patient.findMany({
+      where: { DoctorPatient: { some: { doctorId: query.doctorId } } },
+      orderBy: { registrationDate: "asc" },
+    });
+  } else {
+    return await prisma.patient.findMany({
+      orderBy: { registrationDate: "asc" },
+    });
+  }
+});

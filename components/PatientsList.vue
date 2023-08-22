@@ -69,12 +69,15 @@
 <script setup lang="ts">
 import { Patient } from "~/server/api/patient.get";
 
-const { data, pending, error } = useFetch("/api/patient");
-const patients = computed(() => data.value);
-
-defineProps<{
+const props = defineProps<{
   modelValue: Patient | null;
+  doctorId?: string;
 }>();
+
+const { data, pending, error } = useFetch("/api/patient", {
+  query: { doctorId: props.doctorId },
+});
+const patients = computed(() => data.value);
 
 defineEmits(["update:modelValue"]);
 </script>
