@@ -11,6 +11,25 @@
       >Failed to load patients. Please refresh the page.</span
     >
   </div>
+  <div
+    v-else-if="!patients?.length"
+    class="flex items-center rounded-lg bg-gray-100 p-4 text-sm text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+    role="alert"
+  >
+    <svg
+      class="mr-3 inline h-4 w-4 flex-shrink-0"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+      />
+    </svg>
+    <span class="sr-only">Info</span>
+    <div>No patients found.</div>
+  </div>
   <div v-else class="w-full bg-white dark:bg-gray-800">
     <div class="flow-root">
       <ul role="list" class="divide-y divide-gray-300 dark:divide-gray-700">
@@ -50,7 +69,8 @@
 <script setup lang="ts">
 import { Patient } from "~/server/api/patient.get";
 
-const { data: patients, pending, error } = useFetch("/api/patient");
+const { data, pending, error } = useFetch("/api/patient");
+const patients = computed(() => data.value);
 
 defineProps<{
   modelValue: Patient | null;
