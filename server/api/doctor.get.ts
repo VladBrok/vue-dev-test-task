@@ -7,12 +7,13 @@ export default defineEventHandler(async (event) => {
   const id = typeof query.id === "string" && query.id ? query.id : undefined;
 
   return await prisma.doctor.findMany({
-    where: {
-      OR: [
-        substr ? { name: { contains: substr, mode: "insensitive" } } : {},
-        substr ? { email: { contains: substr, mode: "insensitive" } } : {},
-        { id },
-      ],
-    },
+    where: id
+      ? { id }
+      : {
+          OR: [
+            { name: { contains: substr, mode: "insensitive" } },
+            { email: { contains: substr, mode: "insensitive" } },
+          ],
+        },
   });
 });

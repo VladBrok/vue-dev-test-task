@@ -131,10 +131,14 @@
           </div>
           <button
             type="submit"
-            class="mt-4 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 sm:mt-6"
+            class="mt-4 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-200 disabled:pointer-events-none dark:focus:ring-blue-900 sm:mt-6"
+            :disabled="isSubmitting"
           >
-            {{ submitButton }}
+            {{ submitButtonText }}
           </button>
+          <InputFieldError v-if="isSubmitError"
+            >An error occured. Please try again later</InputFieldError
+          >
         </form>
       </template>
     </div>
@@ -144,6 +148,7 @@
 <script setup lang="ts">
 import { patientSchema } from "~/utils/validation/patient-schema";
 import { z } from "zod";
+import { PostPatient } from "~/server/api/patient.post";
 
 const props = defineProps<{ patientId?: string }>();
 
@@ -154,13 +159,19 @@ const diagnosis = ref("");
 const doctorIds = ref<string[]>([]);
 const errors = ref<z.ZodError>();
 const isSubmitted = ref(false);
+const isSubmitting = ref(false);
+const isSubmitError = ref(false);
 
 const patientId = computed(() => props.patientId);
 const title = computed(() =>
   patientId.value ? "Update a patient" : "Add a new patient",
 );
-const submitButton = computed(() =>
-  patientId.value ? "Update patient" : "Add patient",
+const submitButtonText = computed(() =>
+  isSubmitting.value
+    ? "Loading..."
+    : patientId.value
+    ? "Update patient"
+    : "Add patient",
 );
 
 const { data, pending, error } = useFetch("/api/patient", {
@@ -197,10 +208,29 @@ watch([isSubmitted, name, avatarUrl, email, diagnosis], () => {
   validate();
 });
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   isSubmitted.value = true;
   if (validate()) {
-    console.log("success");
+    isSubmitting.value = true;
+    try {
+      await fetch("/api/patient", {
+        method: "POST",
+        body: JSON.stringify({
+          avatarUrl: avatarUrl.value,
+          name: name.value,
+          email: email.value,
+          diagnosis: diagnosis.value,
+          doctorIds: doctorIds.value,
+        } as PostPatient),
+      });
+      isSubmitError.value = false;
+      navigateTo("/dashboard");
+    } catch (e) {
+      console.error(e);
+      isSubmitError.value = true;
+    } finally {
+      isSubmitting.value = false;
+    }
   }
 };
 

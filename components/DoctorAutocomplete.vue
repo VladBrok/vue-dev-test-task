@@ -165,13 +165,13 @@ const handleRemoveSelected = () => {
 
 watchEffect(() => {
   if (
-    props.modelValue &&
+    modelValue.value &&
     data.value?.length === 1 &&
-    data.value[0].id === props.modelValue
+    data.value[0].id === modelValue.value
   ) {
     selectedDoctor.value = data.value[0];
     searchQuery.value = "";
-  } else if (!props.modelValue) {
+  } else if (!modelValue.value) {
     selectedDoctor.value = undefined;
   }
 });
