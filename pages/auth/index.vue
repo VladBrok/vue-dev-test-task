@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- TODO: use or remove: https://tailwindcomponents.com/component/simple-login-page-2 -->
     <div class="flex h-screen items-center justify-center">
       <div class="mx-auto -mt-8 max-w-[280px]">
         <div class="flex flex-col items-center">

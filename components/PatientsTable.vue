@@ -126,10 +126,10 @@
                     }}
                   </td>
                   <td class="px-4 py-3">
-                    <a
-                      href="#"
+                    <NuxtLink
+                      :to="`/update-patient/${patient.id}`"
                       class="mr-3 font-medium text-blue-600 hover:underline dark:text-blue-500"
-                      >Edit</a
+                      >Edit</NuxtLink
                     >
                     <a
                       href="#"

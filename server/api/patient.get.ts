@@ -3,7 +3,9 @@ import { prisma } from "~/prisma/db";
 
 export type Patient = Awaited<
   ReturnType<typeof prisma.patient.findMany>
->[number] & { doctors: { name: string; id: string; image: string | null }[] };
+>[number] & {
+  doctors: { name: string; id: string; image: string | null; email: string }[];
+};
 
 export default defineEventHandler(async (event): Promise<Patient[]> => {
   const query = getQuery(event);
@@ -33,24 +35,30 @@ export default defineEventHandler(async (event): Promise<Patient[]> => {
         }
       : undefined;
 
+  const whereId =
+    typeof query.id === "string" && query.id ? { id: query.id } : undefined;
+
   return (
     await prisma.patient.findMany({
-      where: { ...whereDoctor, ...whereSubstr },
+      where: whereId || { ...whereDoctor, ...whereSubstr },
       orderBy: { registrationDate: "asc" },
       include: {
         DoctorPatient: {
           include: {
-            doctor: { select: { name: true, id: true, image: true } },
+            doctor: {
+              select: { name: true, id: true, image: true, email: true },
+            },
           },
         },
       },
     })
   ).map((x) => ({
     ...x,
-    doctors: x.DoctorPatient.map((dp) => ({
+    doctors: x?.DoctorPatient.map((dp) => ({
       name: dp.doctor.name,
       id: dp.doctor.id,
       image: dp.doctor.image,
+      email: dp.doctor.email,
     })),
   }));
 });
