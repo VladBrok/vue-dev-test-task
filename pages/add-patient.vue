@@ -76,7 +76,7 @@
             <InputFieldError>{{ errorMessage("diagnosis") }}</InputFieldError>
           </div>
           <div class="sm:col-span-2">
-            <div class="mb-3 flex items-center justify-between">
+            <div class="mb-4 flex items-center justify-between">
               <div
                 class="block text-sm font-medium text-gray-900 dark:text-white"
               >
@@ -103,8 +103,20 @@
                 Add doctor
               </button>
             </div>
-            <div v-for="(doctorId, i) in doctorIds" :key="i" class="mb-5">
-              <DoctorAutocomplete v-model="doctorIds[i]" />
+            <div
+              v-for="(doctorId, i) in doctorIds"
+              :key="i"
+              class="mb-5 flex items-start"
+            >
+              <DoctorAutocomplete v-model="doctorIds[i]" class="w-full" />
+              <button
+                type="button"
+                title="Delete doctor"
+                class="ml-4 mt-4"
+                @click="handleDeleteDoctorClick(i)"
+              >
+                <IconTrash class="h-5 w-5 text-gray-500 dark:text-white" />
+              </button>
             </div>
           </div>
         </div>
@@ -188,5 +200,9 @@ const errorMessage = (
 
 const handleAddDoctorClick = () => {
   doctorIds.value.push("");
+};
+
+const handleDeleteDoctorClick = (index: number) => {
+  doctorIds.value.splice(index, 1);
 };
 </script>

@@ -9,10 +9,10 @@ export default defineEventHandler(async (event) => {
   return await prisma.doctor.findMany({
     where: {
       OR: [
-        { name: { contains: substr, mode: "insensitive" } },
-        { email: { contains: substr, mode: "insensitive" } },
+        substr ? { name: { contains: substr, mode: "insensitive" } } : {},
+        substr ? { email: { contains: substr, mode: "insensitive" } } : {},
+        { id },
       ],
-      id,
     },
   });
 });
