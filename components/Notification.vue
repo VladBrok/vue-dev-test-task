@@ -1,7 +1,7 @@
 <template>
   <div
     :id="id"
-    class="fixed right-5 top-5 mb-4 flex w-full max-w-xs items-center rounded-lg border-2 border-red-200 bg-white p-4 text-gray-500 shadow-lg dark:bg-gray-800 dark:text-gray-400"
+    class="fixed right-5 top-5 z-50 mb-4 flex w-full max-w-xs items-center rounded-lg border-2 border-red-200 bg-white p-4 text-gray-500 shadow-lg dark:bg-gray-800 dark:text-gray-400"
     role="alert"
   >
     <div

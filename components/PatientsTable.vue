@@ -1,6 +1,9 @@
 <template>
   <div class="mt-8">
-    <div v-if="pending && isInitial" class="flex items-center justify-center">
+    <div
+      v-if="(pending && isInitial) || isDeleting"
+      class="flex items-center justify-center"
+    >
       <Spinner />
     </div>
 
@@ -131,11 +134,15 @@
                       class="mr-3 font-medium text-blue-600 hover:underline dark:text-blue-500"
                       >Edit</NuxtLink
                     >
-                    <a
-                      href="#"
+                    <button
+                      type="button"
+                      data-modal-target="popup-modal"
+                      data-modal-toggle="popup-modal"
                       class="font-medium text-red-600 hover:underline dark:text-red-500"
-                      >Remove</a
+                      @click="handleDelete(patient.id)"
                     >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -239,6 +246,10 @@
         </div>
       </div>
     </section>
+
+    <ConfirmationModal @confirmed="handleDeleteConfirm" />
+
+    <Notification v-if="isDeleteError" text="Error while deleting a patient." />
   </div>
 </template>
 
@@ -249,8 +260,11 @@ import { debounce } from "~/utils/debounce";
 const searchQuery = ref("");
 const searchQueryDebounced = ref("");
 const isInitial = ref(true);
+const toDeleteId = ref("");
+const isDeleting = ref(false);
+const isDeleteError = ref(false);
 
-const { data, pending, error } = useFetch("/api/patient", {
+const { data, pending, error, refresh } = useFetch("/api/patient", {
   query: { substr: searchQueryDebounced },
 });
 const patients = computed(() => data.value);
@@ -258,6 +272,28 @@ const patients = computed(() => data.value);
 const updateSearchQueryDebounced = debounce(() => {
   searchQueryDebounced.value = searchQuery.value;
 });
+
+const handleDelete = (patientId: string) => {
+  toDeleteId.value = patientId;
+};
+
+const handleDeleteConfirm = async () => {
+  isDeleting.value = true;
+  try {
+    await $fetch("/api/patient", {
+      method: "DELETE",
+      query: { id: toDeleteId.value },
+    });
+    isDeleteError.value = false;
+    refresh();
+  } catch (err) {
+    console.log(err);
+    isDeleteError.value = true;
+  } finally {
+    toDeleteId.value = "";
+    isDeleting.value = false;
+  }
+};
 
 watch(
   searchQuery,
@@ -267,15 +303,19 @@ watch(
   { immediate: true },
 );
 
-watch(pending, () => {
-  if (pending.value) {
-    return;
-  }
+watch(
+  pending,
+  () => {
+    if (pending.value) {
+      return;
+    }
 
-  isInitial.value = false;
+    isInitial.value = false;
 
-  setTimeout(() => {
-    initFlowbite();
-  });
-});
+    setTimeout(() => {
+      initFlowbite();
+    });
+  },
+  { immediate: true },
+);
 </script>
