@@ -75,6 +75,35 @@
             ></textarea>
             <InputFieldError>{{ errorMessage("diagnosis") }}</InputFieldError>
           </div>
+          <div class="sm:col-span-2">
+            <div class="mb-3 flex items-center justify-between">
+              <div
+                class="block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Doctors
+              </div>
+              <button
+                type="button"
+                class="inline-flex items-center rounded-lg bg-blue-700 px-2 py-1 text-center text-xs font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  class="mr-2 h-5 w-5"
+                  fill="currentColor"
+                  viewbox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    fill-rule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  />
+                </svg>
+                Add doctor
+              </button>
+            </div>
+            <DoctorAutocomplete v-model="selectedDoctorId" />
+          </div>
         </div>
         <button
           type="submit"
@@ -96,6 +125,8 @@ const email = ref("");
 const diagnosis = ref("");
 const errors = ref<z.ZodError>();
 const isSubmitted = ref(false);
+
+const selectedDoctorId = ref(""); // TODO: use array instead
 
 const createPatientSchema = z.object({
   name: z.string().min(1, { message: "Must be 1 or more characters long" }),

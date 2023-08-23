@@ -252,7 +252,7 @@ const isInitial = ref(true);
 
 const { data, pending, error } = useFetch("/api/patient", {
   query: { substr: searchQueryDebounced },
-}); // TODO: handle empty
+});
 const patients = computed(() => data.value);
 
 const updateSearchQueryDebounced = debounce(() => {
