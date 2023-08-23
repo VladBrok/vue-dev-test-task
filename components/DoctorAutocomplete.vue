@@ -129,13 +129,7 @@ const { data, pending, error } = useFetch("/api/doctor", {
 });
 
 const doctors = computed(() => data.value);
-const selectedDoctor = computed(() =>
-  props.modelValue &&
-  data.value?.length === 1 &&
-  data.value[0].id === props.modelValue
-    ? data.value[0]
-    : undefined,
-);
+const selectedDoctor = ref();
 const isShowDropdown = computed(
   () => canShowDropdown.value && searchQuery.value,
 );
@@ -161,6 +155,18 @@ const handleRemoveSelected = () => {
     inputRef?.value?.focus();
   });
 };
+
+watchEffect(() => {
+  if (
+    props.modelValue &&
+    data.value?.length === 1 &&
+    data.value[0].id === props.modelValue
+  ) {
+    selectedDoctor.value = data.value[0];
+  } else if (!props.modelValue) {
+    selectedDoctor.value = undefined;
+  }
+});
 
 watch(
   searchQuery,

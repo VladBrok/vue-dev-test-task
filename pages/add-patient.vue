@@ -85,6 +85,7 @@
               <button
                 type="button"
                 class="inline-flex items-center rounded-lg bg-blue-700 px-2 py-1 text-center text-xs font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                @click="handleAddDoctorClick"
               >
                 <svg
                   class="mr-2 h-5 w-5"
@@ -102,7 +103,9 @@
                 Add doctor
               </button>
             </div>
-            <DoctorAutocomplete v-model="selectedDoctorId" />
+            <div v-for="(doctorId, i) in doctorIds" :key="i" class="mb-5">
+              <DoctorAutocomplete v-model="doctorIds[i]" />
+            </div>
           </div>
         </div>
         <button
@@ -125,8 +128,7 @@ const email = ref("");
 const diagnosis = ref("");
 const errors = ref<z.ZodError>();
 const isSubmitted = ref(false);
-
-const selectedDoctorId = ref(""); // TODO: use array instead
+const doctorIds = ref([""]);
 
 const createPatientSchema = z.object({
   name: z.string().min(1, { message: "Must be 1 or more characters long" }),
@@ -182,5 +184,9 @@ const errorMessage = (
   }
 
   return message;
+};
+
+const handleAddDoctorClick = () => {
+  doctorIds.value.push("");
 };
 </script>
