@@ -118,6 +118,7 @@
 </template>
 
 <script setup lang="ts">
+import { nanoid } from "nanoid";
 import { debounce } from "~/utils/debounce";
 
 const props = defineProps<{
@@ -135,6 +136,7 @@ const selectedDoctor = ref();
 const modelValue = computed(() => props.modelValue);
 const { data, pending, error } = useFetch("/api/doctor", {
   query: { substr: searchQueryDebounced, id: modelValue },
+  key: nanoid(),
 });
 
 const doctors = computed(() => data.value);

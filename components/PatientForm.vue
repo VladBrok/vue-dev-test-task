@@ -212,17 +212,20 @@ const handleSubmit = async () => {
   isSubmitted.value = true;
   if (validate()) {
     isSubmitting.value = true;
+    const method = patientId.value ? "PUT" : "POST";
     try {
-      await fetch("/api/patient", {
-        method: "POST",
-        body: JSON.stringify({
+      await $fetch("/api/patient", {
+        method,
+        query: { id: patientId.value },
+        body: {
           avatarUrl: avatarUrl.value,
           name: name.value,
           email: email.value,
           diagnosis: diagnosis.value,
           doctorIds: doctorIds.value,
-        } as PostPatient),
+        } as PostPatient,
       });
+
       isSubmitError.value = false;
       navigateTo("/dashboard");
     } catch (e) {

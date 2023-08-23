@@ -5,7 +5,7 @@ import { patientSchema } from "~/utils/validation/patient-schema";
 export type PostPatient = z.infer<typeof patientSchema>;
 
 export default defineEventHandler(async (event) => {
-  const body = JSON.parse(await readBody(event)) as PostPatient;
+  const body = (await readBody(event)) as PostPatient;
 
   const parseResult = patientSchema.safeParse(body);
 
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       image: body.avatarUrl,
       email: body.email,
       DoctorPatient: {
-        create: body.doctorIds.map((id) => ({ doctorId: id })),
+        create: body.doctorIds.filter(Boolean).map((id) => ({ doctorId: id })),
       },
     },
   });
