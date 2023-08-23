@@ -142,6 +142,7 @@
 </template>
 
 <script setup lang="ts">
+import { patientSchema } from "~/utils/validation/patient-schema";
 import { z } from "zod";
 
 const props = defineProps<{ patientId?: string }>();
@@ -166,16 +167,6 @@ const { data, pending, error } = useFetch("/api/patient", {
   query: { id: patientId },
 });
 const patient = computed(() => patientId.value && data.value?.[0]);
-
-const patientSchema = z.object({
-  name: z.string().min(1, { message: "Must be 1 or more characters long" }),
-  email: z.string().email({ message: "Please specify a valid email" }),
-  avatarUrl: z
-    .string()
-    .url({ message: "Please specify a valid url" })
-    .optional(),
-  diagnosis: z.string(),
-});
 
 watch(
   patient,
@@ -219,6 +210,7 @@ const validate = (): boolean => {
     name: name.value,
     email: email.value,
     diagnosis: diagnosis.value,
+    doctorIds: doctorIds.value,
   });
 
   if (!parseResult.success) {
