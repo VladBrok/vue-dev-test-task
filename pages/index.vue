@@ -11,7 +11,10 @@
       <PatientsView title="All Patients" />
     </template>
 
-    <Notification v-if="isSaveError" text="Error while saving an account." />
+    <Notification
+      v-if="isSaveError"
+      text="Error while retrieving an account data."
+    />
   </div>
 </template>
 
