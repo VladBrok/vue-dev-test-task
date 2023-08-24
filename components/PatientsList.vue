@@ -2,15 +2,15 @@
   <div v-if="pending" class="mt-16 flex justify-center">
     <Spinner />
   </div>
-  <div
-    v-else-if="error"
-    class="mb-4 rounded-lg bg-red-50 p-4 text-base text-red-800 dark:bg-gray-800 dark:text-red-400"
-    role="alert"
-  >
-    <span class="font-bold"
-      >Failed to load patients. Please refresh the page.</span
-    >
+
+  <div v-else-if="error" class="mr-4">
+    <AlertError>Failed to load patients. Please refresh the page.</AlertError>
   </div>
+
+  <div v-else-if="!patients?.length" class="mr-4">
+    <AlertInfo> No patients found. </AlertInfo>
+  </div>
+
   <div v-else class="w-full bg-white dark:bg-gray-800">
     <div class="flow-root">
       <ul role="list" class="divide-y divide-gray-300 dark:divide-gray-700">
@@ -48,13 +48,20 @@
 </template>
 
 <script setup lang="ts">
+import { nanoid } from "nanoid";
 import { Patient } from "~/server/api/patient.get";
 
-const { data: patients, pending, error } = useFetch("/api/patient");
-
-defineProps<{
+const props = defineProps<{
   modelValue: Patient | null;
+  doctorId?: string;
 }>();
+
+const doctorId = computed(() => props.doctorId);
+const { data, pending, error } = useFetch("/api/patient", {
+  query: { doctorId },
+  key: nanoid(),
+});
+const patients = computed(() => data.value?.patients);
 
 defineEmits(["update:modelValue"]);
 </script>

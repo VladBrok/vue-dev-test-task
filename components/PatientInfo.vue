@@ -25,6 +25,23 @@
         {{ patient.diagnosis }}
       </p>
     </div>
+
+    <div>
+      <h3 class="mb-3 mt-6 text-xl font-medium text-gray-900 dark:text-white">
+        Doctors
+      </h3>
+      <ul v-if="patient.doctors.length">
+        <li
+          v-for="doctor in patient.doctors"
+          :key="doctor.id"
+          class="mb-3 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+        >
+          <img :src="doctor.image || ''" class="h-6 w-6 rounded-full" />
+          <span>{{ doctor.name }}</span>
+        </li>
+      </ul>
+      <span v-else>—</span>
+    </div>
   </div>
 </template>
 

@@ -30,9 +30,9 @@ model Patient {
 
 model DoctorPatient {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  doctor    Doctor  @relation(fields: [doctorId], references: [id])
+  doctor    Doctor  @relation(fields: [doctorId], references: [id], onDelete: Cascade)
   doctorId  String  @db.ObjectId
-  patient   Patient @relation(fields: [patientId], references: [id])
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
   patientId String  @db.ObjectId
 
   @@index([doctorId])
