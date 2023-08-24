@@ -149,6 +149,7 @@
 import { patientSchema } from "~/utils/validation/patient-schema";
 import { z } from "zod";
 import { PostPatient } from "~/server/api/patient.post";
+import { nanoid } from "nanoid";
 
 const props = defineProps<{ patientId?: string }>();
 
@@ -176,8 +177,9 @@ const submitButtonText = computed(() =>
 
 const { data, pending, error } = useFetch("/api/patient", {
   query: { id: patientId },
+  key: nanoid(),
 });
-const patient = computed(() => patientId.value && data.value?.[0]);
+const patient = computed(() => patientId.value && data.value?.patients[0]);
 
 watch(
   patient,

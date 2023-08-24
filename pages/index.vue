@@ -8,6 +8,8 @@
 </template>
 
 <script setup lang="ts">
+import { nanoid } from "nanoid";
+
 const auth = useAuth();
 const isSaveError = ref(false);
 const doctorId = ref("");
@@ -20,6 +22,7 @@ if (auth.user) {
       email: auth.user.email,
       image: auth.user.picture,
     },
+    key: nanoid(),
   })
     .then(({ data }) => {
       doctorId.value = data.value?.id || "";

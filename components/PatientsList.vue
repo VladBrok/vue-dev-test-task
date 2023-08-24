@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { nanoid } from "nanoid";
 import { Patient } from "~/server/api/patient.get";
 
 const props = defineProps<{
@@ -55,10 +56,12 @@ const props = defineProps<{
   doctorId?: string;
 }>();
 
+const doctorId = computed(() => props.doctorId);
 const { data, pending, error } = useFetch("/api/patient", {
-  query: { doctorId: props.doctorId },
+  query: { doctorId },
+  key: nanoid(),
 });
-const patients = computed(() => data.value);
+const patients = computed(() => data.value?.patients);
 
 defineEmits(["update:modelValue"]);
 </script>

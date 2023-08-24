@@ -13,7 +13,7 @@
 
     <section
       v-else
-      class="overflow-x-auto break-words bg-gray-50 p-3 dark:bg-gray-900 sm:p-5"
+      :class="`overflow-x-auto break-words bg-gray-50 p-3 dark:bg-gray-900 sm:p-5`"
     >
       <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <div
@@ -82,7 +82,11 @@
               </button>
             </div>
           </div>
-          <div class="overflow-x-auto">
+          <div
+            :class="`overflow-x-auto
+          ${pending ? 'pointer-events-none opacity-70' : ''}
+          `"
+          >
             <table
               class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
             >
@@ -152,21 +156,12 @@
             class="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0"
             aria-label="Table navigation"
           >
-            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-              Showing
-              <span class="font-semibold text-gray-900 dark:text-white"
-                >1-10</span
-              >
-              of
-              <span class="font-semibold text-gray-900 dark:text-white"
-                >1000</span
-              >
-            </span>
             <ul class="inline-flex items-stretch -space-x-px">
               <li>
-                <a
-                  href="#"
-                  class="ml-0 flex h-full items-center justify-center rounded-l-lg border border-gray-300 bg-white px-3 py-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                <button
+                  class="ml-0 flex h-full items-center justify-center rounded-l-lg border border-gray-300 bg-white px-3 py-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:pointer-events-none disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  @click="goToPrevPage"
+                  :disabled="!canGoToPrevPage"
                 >
                   <span class="sr-only">Previous</span>
                   <svg
@@ -182,48 +177,20 @@
                       clip-rule="evenodd"
                     />
                   </svg>
-                </a>
+                </button>
               </li>
               <li>
-                <a
-                  href="#"
-                  class="flex items-center justify-center border border-gray-300 bg-white px-3 py-2 text-sm leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >1</a
+                <div
+                  class="flex items-center justify-center border border-gray-300 bg-blue-50 px-3 py-2 text-sm leading-tight text-blue-600 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-400"
                 >
+                  {{ currentPage }}
+                </div>
               </li>
               <li>
-                <a
-                  href="#"
-                  class="flex items-center justify-center border border-gray-300 bg-white px-3 py-2 text-sm leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >2</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  aria-current="page"
-                  class="z-10 flex items-center justify-center border border-blue-300 bg-blue-50 px-3 py-2 text-sm leading-tight text-blue-600 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                  >3</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="flex items-center justify-center border border-gray-300 bg-white px-3 py-2 text-sm leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >...</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="flex items-center justify-center border border-gray-300 bg-white px-3 py-2 text-sm leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >100</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="flex h-full items-center justify-center rounded-r-lg border border-gray-300 bg-white px-3 py-1.5 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                <button
+                  class="ml-0 flex h-full items-center justify-center rounded-r-lg border border-gray-300 bg-white px-3 py-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:pointer-events-none disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  @click="goToNextPage"
+                  :disabled="!canGoToNextPage"
                 >
                   <span class="sr-only">Next</span>
                   <svg
@@ -239,7 +206,7 @@
                       clip-rule="evenodd"
                     />
                   </svg>
-                </a>
+                </button>
               </li>
             </ul>
           </nav>
@@ -255,7 +222,10 @@
 
 <script setup lang="ts">
 import { initFlowbite } from "flowbite";
+import { nanoid } from "nanoid";
 import { debounce } from "~/utils/debounce";
+
+const PAGE_SIZE = 8;
 
 const searchQuery = ref("");
 const searchQueryDebounced = ref("");
@@ -263,11 +233,34 @@ const isInitial = ref(true);
 const toDeleteId = ref("");
 const isDeleting = ref(false);
 const isDeleteError = ref(false);
+const currentPage = ref(1);
 
+const skip = computed(() => (currentPage.value - 1) * PAGE_SIZE);
 const { data, pending, error, refresh } = useFetch("/api/patient", {
-  query: { substr: searchQueryDebounced },
+  query: { substr: searchQueryDebounced, skip, take: PAGE_SIZE },
+  key: nanoid(),
 });
-const patients = computed(() => data.value);
+const patients = computed(() => data.value?.patients);
+const total = computed(() => data.value?.total);
+const totalPages = computed(() => Math.ceil((total.value || 1) / PAGE_SIZE));
+const canGoToPrevPage = computed(() => currentPage.value > 1);
+const canGoToNextPage = computed(() => currentPage.value < totalPages.value);
+
+const goToPrevPage = () => {
+  if (!canGoToPrevPage.value) {
+    return;
+  }
+
+  currentPage.value--;
+};
+
+const goToNextPage = () => {
+  if (!canGoToNextPage.value) {
+    return;
+  }
+
+  currentPage.value++;
+};
 
 const updateSearchQueryDebounced = debounce(() => {
   searchQueryDebounced.value = searchQuery.value;
@@ -287,7 +280,7 @@ const handleDeleteConfirm = async () => {
     isDeleteError.value = false;
     refresh();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     isDeleteError.value = true;
   } finally {
     toDeleteId.value = "";
