@@ -1,7 +1,12 @@
 <template>
   <div>
-    <PatientsView title="My Patients" :doctorId="doctorId" />
-    <PatientsView title="All Patients" />
+    <div v-if="!doctorId" class="mt-8 flex items-center justify-center">
+      <Spinner />
+    </div>
+    <template v-else>
+      <PatientsView title="My Patients" :doctorId="doctorId" />
+      <PatientsView title="All Patients" />
+    </template>
 
     <Notification v-if="isSaveError" text="Error while saving an account." />
   </div>
