@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="!doctorId" class="mt-8 flex items-center justify-center">
+    <div
+      v-if="!doctorId && !isSaveError"
+      class="mt-8 flex items-center justify-center"
+    >
       <Spinner />
     </div>
     <template v-else-if="!isSaveError">
@@ -20,7 +23,7 @@ const isSaveError = ref(false);
 const doctorId = ref("");
 
 if (auth.user) {
-  useFetch("/api/doctor", {
+  $fetch("/api/doctor", {
     method: "POST",
     body: {
       name: auth.user.name,
@@ -29,8 +32,8 @@ if (auth.user) {
     },
     key: nanoid(),
   })
-    .then(({ data }) => {
-      doctorId.value = data.value?.id || "";
+    .then((data) => {
+      doctorId.value = data?.id || "";
       isSaveError.value = false;
     })
     .catch((err) => {
