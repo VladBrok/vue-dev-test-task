@@ -48,9 +48,14 @@
 </template>
 
 <script setup lang="ts">
+import { initFlowbite } from "flowbite";
 import { nanoid } from "nanoid";
 
 defineProps<{ text: string }>();
 
 const id = nanoid();
+
+onMounted(() => {
+  initFlowbite();
+});
 </script>
