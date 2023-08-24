@@ -3,7 +3,7 @@
     <div v-if="!doctorId" class="mt-8 flex items-center justify-center">
       <Spinner />
     </div>
-    <template v-else>
+    <template v-else-if="!isSaveError">
       <PatientsView title="My Patients" :doctorId="doctorId" />
       <PatientsView title="All Patients" />
     </template>
